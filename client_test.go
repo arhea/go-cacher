@@ -26,6 +26,52 @@ func TestClient(t *testing.T) {
 	r := mock.Client()
 	client := cacher.New(r)
 
+	t.Run("Basic", func(t *testing.T) {
+		key := "basic"
+		value := "hello-world"
+
+		err := client.Put(ctx, key, value, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		hasValue, err := client.Has(ctx, key)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.True(t, hasValue, "should be true as the key exists")
+
+		fetchedValue, err := client.Get(ctx, key)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.Equal(t, value, fetchedValue, "should be equal as the value was stored")
+
+		err = client.Forget(ctx, key)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		hasValue, err = client.Has(ctx, key)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.False(t, hasValue, "should be false as the key has been forgotten")
+	})
+
 	t.Run("BasicString", func(t *testing.T) {
 		key := "basic-string"
 		value := "hello-world"
@@ -70,6 +116,160 @@ func TestClient(t *testing.T) {
 		}
 
 		assert.False(t, hasValue, "should be false as the key has been forgotten")
+	})
+
+	t.Run("GetStringWithDefault", func(t *testing.T) {
+		key := "default-string"
+
+		cacheValue := "cache-value"
+		defaultValue := "default-value"
+
+		value1 := client.GetStringWithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, defaultValue, value1, "should be equal as the value was not stored")
+
+		err := client.Put(ctx, key, cacheValue, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value2 := client.GetStringWithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, cacheValue, value2, "should be equal as the value is stored")
+	})
+
+	t.Run("GetIntWithDefault", func(t *testing.T) {
+		key := "default-int"
+
+		cacheValue := int(92)
+		defaultValue := int(23)
+
+		value1 := client.GetIntWithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, defaultValue, value1, "should be equal as the value was not stored")
+
+		err := client.Put(ctx, key, cacheValue, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value2 := client.GetIntWithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, cacheValue, value2, "should be equal as the value is stored")
+	})
+
+	t.Run("GetInt64WithDefault", func(t *testing.T) {
+		key := "default-int64"
+
+		cacheValue := int64(92)
+		defaultValue := int64(23)
+
+		value1 := client.GetInt64WithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, defaultValue, value1, "should be equal as the value was not stored")
+
+		err := client.Put(ctx, key, cacheValue, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value2 := client.GetInt64WithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, cacheValue, value2, "should be equal as the value is stored")
+	})
+
+	t.Run("GetFloat32WithDefault", func(t *testing.T) {
+		key := "default-float32"
+
+		cacheValue := float32(92)
+		defaultValue := float32(23)
+
+		value1 := client.GetFloat32WithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, defaultValue, value1, "should be equal as the value was not stored")
+
+		err := client.Put(ctx, key, cacheValue, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value2 := client.GetFloat32WithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, cacheValue, value2, "should be equal as the value is stored")
+	})
+
+	t.Run("GetFloat64WithDefault", func(t *testing.T) {
+		key := "default-float64"
+
+		cacheValue := float64(92)
+		defaultValue := float64(23)
+
+		value1 := client.GetFloat64WithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, defaultValue, value1, "should be equal as the value was not stored")
+
+		err := client.Put(ctx, key, cacheValue, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value2 := client.GetFloat64WithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, cacheValue, value2, "should be equal as the value is stored")
+	})
+
+	t.Run("GetBoolWithDefault", func(t *testing.T) {
+		key := "default-bool"
+
+		cacheValue := true
+		defaultValue := false
+
+		value1 := client.GetBoolWithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, defaultValue, value1, "should be equal as the value was not stored")
+
+		err := client.Put(ctx, key, cacheValue, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value2 := client.GetBoolWithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, cacheValue, value2, "should be equal as the value is stored")
+	})
+
+	t.Run("GetBytesWithDefault", func(t *testing.T) {
+		key := "default-bytes"
+
+		cacheValue := []byte("hello-world")
+		defaultValue := []byte("hello-mars")
+
+		value1 := client.GetBytesWithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, defaultValue, value1, "should be equal as the value was not stored")
+
+		err := client.Put(ctx, key, cacheValue, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value2 := client.GetBytesWithDefault(ctx, key, defaultValue)
+
+		assert.Equal(t, cacheValue, value2, "should be equal as the value is stored")
 	})
 
 	t.Run("RememberString", func(t *testing.T) {
@@ -138,6 +338,42 @@ func TestClient(t *testing.T) {
 		assert.Equal(t, value, fetchedValue, "should be equal as the value was stored")
 	})
 
+	t.Run("RememberBool", func(t *testing.T) {
+		key := "remember-bool"
+		value1 := true
+
+		value, err := client.RememberBool(ctx, key, time.Minute*5, func(ctx context.Context) (bool, error) {
+			return value1, nil
+		})
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.Equal(t, value1, value, "value should be equal to the fetched value")
+
+		hasValue, err := client.Has(ctx, key)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.True(t, hasValue, "should be true as the key exists")
+
+		value, err = client.RememberBoolForever(ctx, key, func(ctx context.Context) (bool, error) {
+			return false, nil
+		})
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.Equal(t, value1, value, "value should still be equal to the fetched value as it should be in the cache")
+	})
+
 	t.Run("BasicInt", func(t *testing.T) {
 		key := "basic-int"
 		value := int(12)
@@ -192,7 +428,7 @@ func TestClient(t *testing.T) {
 
 		assert.True(t, hasValue, "should be true as the key exists")
 
-		value, err = client.RememberInt(ctx, key, time.Minute*5, func(ctx context.Context) (int, error) {
+		value, err = client.RememberIntForever(ctx, key, func(ctx context.Context) (int, error) {
 			return 47, nil
 		})
 
@@ -258,7 +494,7 @@ func TestClient(t *testing.T) {
 
 		assert.True(t, hasValue, "should be true as the key exists")
 
-		value, err = client.RememberInt64(ctx, key, time.Minute*5, func(ctx context.Context) (int64, error) {
+		value, err = client.RememberInt64Forever(ctx, key, func(ctx context.Context) (int64, error) {
 			return 47, nil
 		})
 
@@ -324,7 +560,7 @@ func TestClient(t *testing.T) {
 
 		assert.True(t, hasValue, "should be true as the key exists")
 
-		value, err = client.RememberFloat32(ctx, key, time.Minute*5, func(ctx context.Context) (float32, error) {
+		value, err = client.RememberFloat32Forever(ctx, key, func(ctx context.Context) (float32, error) {
 			return 47, nil
 		})
 
@@ -390,7 +626,7 @@ func TestClient(t *testing.T) {
 
 		assert.True(t, hasValue, "should be true as the key exists")
 
-		value, err = client.RememberFloat64(ctx, key, time.Minute*5, func(ctx context.Context) (float64, error) {
+		value, err = client.RememberFloat64Forever(ctx, key, func(ctx context.Context) (float64, error) {
 			return 47, nil
 		})
 
@@ -430,6 +666,42 @@ func TestClient(t *testing.T) {
 		}
 
 		assert.True(t, bytes.Equal(value, fetchedValue), "should be equal as the value was stored")
+	})
+
+	t.Run("RememberBytes", func(t *testing.T) {
+		key := "remember-bytes"
+		value1 := []byte("hello-world")
+
+		value, err := client.RememberBytes(ctx, key, time.Minute*5, func(ctx context.Context) ([]byte, error) {
+			return value1, nil
+		})
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.Equal(t, value1, value, "value should be equal to the fetched value")
+
+		hasValue, err := client.Has(ctx, key)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.True(t, hasValue, "should be true as the key exists")
+
+		value, err = client.RememberBytesForever(ctx, key, func(ctx context.Context) ([]byte, error) {
+			return []byte("hello-cruel-world"), nil
+		})
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.Equal(t, value1, value, "value should still be equal to the fetched value as it should be in the cache")
 	})
 
 	t.Run("TestTTL", func(t *testing.T) {
@@ -513,6 +785,50 @@ func TestClient(t *testing.T) {
 		}
 
 		assert.False(t, hasValue5, "should be false as the key has been forgotten")
+	})
+
+	t.Run("IncrementDecrement", func(t *testing.T) {
+		key := "counter"
+
+		err := client.Put(ctx, key, 1, time.Minute*5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		err = client.Increment(ctx, key, 5)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value1, err := client.GetInt(ctx, key)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.Equal(t, 6, value1, "should be equal as the value was incremented")
+
+		err = client.Decrement(ctx, key, 1)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		value2, err := client.GetInt(ctx, key)
+
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		assert.Equal(t, 5, value2, "should be equal as the value was decremented")
+
 	})
 
 	t.Run("GetWithNotFoundError", func(t *testing.T) {

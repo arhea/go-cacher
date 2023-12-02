@@ -1,6 +1,11 @@
-name: Quality
+name: Test / Quality
 
-on: push
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    types: [opened, reopened, edited]
 
 jobs:
   check:

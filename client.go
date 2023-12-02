@@ -228,6 +228,18 @@ func (c *Client) GetStringWithDefault(ctx context.Context, key string, defaultVa
 	return val
 }
 
+// GetBoolWithDefault will return the value as a string. If there was an error or the value is zero, it will return
+// the default value.
+func (c *Client) GetBoolWithDefault(ctx context.Context, key string, defaultValue bool) bool {
+	val, err := c.GetBool(ctx, key)
+
+	if err != nil {
+		return defaultValue
+	}
+
+	return val
+}
+
 // GetBytesWithDefault will return the value as a []byte. If there was an error or the value is nil, it will return
 // the default value.
 func (c *Client) GetBytesWithDefault(ctx context.Context, key string, defaultValue []byte) []byte {
@@ -322,6 +334,42 @@ func (c *Client) RememberString(ctx context.Context, key string, exp time.Durati
 // RememberStringForever is the same as RememberString but it will not expire the value.
 func (c *Client) RememberStringForever(ctx context.Context, key string, fetcher func(ctx context.Context) (string, error)) (string, error) {
 	return c.RememberString(ctx, key, 0, fetcher)
+}
+
+// RememberBool will attempt to get the value from the cache. If it is not found it will call the fetcher function to
+// get the value. It will then put the value in the cache for later. It returns the value or an error if there was one.
+func (c *Client) RememberBool(ctx context.Context, key string, exp time.Duration, fetcher func(ctx context.Context) (bool, error)) (bool, error) {
+	// attempt to fetch the value from the cache
+	val, err := c.GetBool(ctx, key)
+
+	// if there was no error and the value isn't blank return
+	if err == nil {
+		return val, nil
+	}
+
+	// if there was an error and it wasn't a not found error return
+	if err != nil && !errors.Is(err, NotFoundError) {
+		return false, err
+	}
+
+	// call the fetcher to get the value we should remember
+	val, err = fetcher(ctx)
+
+	if err != nil {
+		return false, err
+	}
+
+	// put the value in the cache for later
+	if err := c.Put(ctx, key, val, exp); err != nil {
+		return false, err
+	}
+
+	return val, nil
+}
+
+// RememberBoolForever is the same as RememberBool but it will not expire the value.
+func (c *Client) RememberBoolForever(ctx context.Context, key string, fetcher func(ctx context.Context) (bool, error)) (bool, error) {
+	return c.RememberBool(ctx, key, 0, fetcher)
 }
 
 // RememberBytes will attempt to get the value from the cache. If it is not found it will call the fetcher function to
