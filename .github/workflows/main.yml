@@ -1,0 +1,25 @@
+name: Quality
+
+on: push
+
+jobs:
+  check:
+    name: Quality / Check
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v4
+        with:
+          check-latest: true
+          go-version: stable
+
+      - uses: golangci/golangci-lint-action@v3
+
+      - run: make ci
+        shell: bash

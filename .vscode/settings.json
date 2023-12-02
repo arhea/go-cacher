@@ -1,0 +1,80 @@
+{
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.codeActionsOnSave": [ ],
+  "editor.rulers": [ 120 ],
+
+  // markdown formatting options
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // json formatting options
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  // yaml formatting options
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  // we want to support make files as well
+  "[makefile]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-vscode.makefile-tools"
+  },
+  // go specific settings
+  "[go]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "golang.go",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true,
+      "source.fixAll": true
+    }
+  },
+  // make sure the go language server is enabled
+  "go.useLanguageServer": true,
+  // configure gopls, the go language server
+  "gopls": {
+    "ui.semanticTokens": true,
+    "ui.completion.usePlaceholders": true
+  },
+  // configure the go formatting tool to be goimports
+  "go.formatTool": "goimports",
+  "go.formatFlags": [ "-local", "github.com/arhea/" ],
+
+  // change the linting tool to be golangci
+  "go.lintTool": "golangci-lint",
+  "go.lintOnSave": "workspace",
+  "go.lintFlags": [ "--fast" ],
+  // configure the tags we want to add by default
+  "go.addTags": {
+    "tags": "json,validate",
+    "options": "json=omitempty,validate=omitempty",
+    "promptForTags": false,
+    "transform": "snakecase",
+    "template": ""
+  },
+  // dont run code coverage on save
+  "go.coverOnSave": false,
+  "go.coverOnSingleTest": true,
+  "go.coverOnTestPackage": true,
+  "go.coverShowCounts": false,
+  "go.coverageDecorator": {
+    "type": "gutter",
+    "coveredHighlightColor": "rgba(64,128,128,0.5)",
+    "uncoveredHighlightColor": "rgba(128,64,64,0.25)",
+    "coveredGutterStyle": "blockgreen",
+    "uncoveredGutterStyle": "blockred"
+  },
+  // configure some helpful test environment variables
+  "go.testEnvVars": {
+    "WORKSPACE_DIR": "${workspaceFolder}"
+  }
+}
