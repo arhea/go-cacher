@@ -1,5 +1,7 @@
 # Cacher
 
+![Tests](https://github.com/arhea/go-cacher/actions/workflows/main.yml/badge.svg?branch=main) ![goreportcard](https://goreportcard.com/badge/github.com/arhea/go-cacher)
+
 Inspired by the [Laravel Cache Facade](https://laravel.com/docs/10.x/cache), `cacher` provides a convenient wrapper around the official [Redis client](https://github.com/redis/go-redis). This library provides two methods for interacting with Redis. The first is via standard types such as strings, bytes, numbers, etc. However, often times we want to store structs. Cacher also ships with an Entity cache that uses generics. This client automatically marshalls the structs using JSON to and from the redis cache.
 
 ## Usage
