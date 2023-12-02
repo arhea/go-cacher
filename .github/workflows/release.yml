@@ -1,0 +1,17 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  docs:
+    name: Trigger Documentation
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: "read"
+
+    steps:
+      - run: curl -sfL  https://proxy.golang.org/github.com/${{ github.repository }}/@v/${{ github.ref_name }}.info
+        shell: bash
