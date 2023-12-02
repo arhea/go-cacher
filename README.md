@@ -1,12 +1,12 @@
 # Cacher
 
-![Tests](https://github.com/arhea/go-cacher/actions/workflows/main.yml/badge.svg?branch=main) ![goreportcard](https://goreportcard.com/badge/github.com/arhea/go-cacher)
+![Tests](https://github.com/arhea/go-cacher/actions/workflows/main.yml/badge.svg?branch=main) ![goreportcard](https://goreportcard.com/badge/github.com/arhea/go-cacher) ![GitHub License](https://img.shields.io/github/license/arhea/go-mock-spanner)
 
 Inspired by the [Laravel Cache Facade](https://laravel.com/docs/10.x/cache), `cacher` provides a convenient wrapper around the official [Redis client](https://github.com/redis/go-redis). This library provides two methods for interacting with Redis. The first is via standard types such as strings, bytes, numbers, etc. However, often times we want to store structs. Cacher also ships with an Entity cache that uses generics. This client automatically marshalls the structs using JSON to and from the redis cache.
 
 ## Usage
 
-## Client
+### Client
 
 The client provides a standard wrapper around the Redis client.
 
@@ -40,7 +40,7 @@ err := cache.Forget(ctx, "my-key")
 
 ```
 
-## Entity Client
+### Entity Client
 
 The entity client uses generics and JSON marshalling for automatically marhsalling data to and from the cache.
 
@@ -72,3 +72,11 @@ value, err := cache.Get(ctx, "my-key")
 // delete a key in the database
 err := cache.Forget(ctx, "my-key")
 ```
+
+## Sponsors
+
+`Cacher` is a non-commercial open source project. If you want to support `Cacher`, you can sponsor the project through Github.
+
+## License
+
+Copyright © 2023 Alex Rhea. This project is available with the [MIT License](./LICENSE).
