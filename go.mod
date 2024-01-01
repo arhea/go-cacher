@@ -4,7 +4,7 @@ go 1.21.4
 
 require (
 	github.com/arhea/go-mock-redis v1.0.0
-	github.com/brianvoe/gofakeit/v6 v6.25.0
+	github.com/brianvoe/gofakeit/v6 v6.26.3
 	github.com/redis/go-redis/v9 v9.3.1
 	github.com/stretchr/testify v1.8.4
 )
