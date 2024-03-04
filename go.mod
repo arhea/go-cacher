@@ -6,7 +6,7 @@ require (
 	github.com/arhea/go-mock-redis v1.0.0
 	github.com/brianvoe/gofakeit/v6 v6.25.0
 	github.com/redis/go-redis/v9 v9.5.1
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
