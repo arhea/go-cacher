@@ -131,11 +131,6 @@ func (c *EntityClient[E]) Remember(ctx context.Context, key string, exp time.Dur
 		return val, nil
 	}
 
-	// if there was an error and it wasn't a not found error return
-	if err != nil && !errors.Is(err, NotFoundError) {
-		return nil, err
-	}
-
 	// call the fetcher to get the value we should remember
 	val, err = fetcher(ctx)
 
@@ -165,11 +160,6 @@ func (c *EntityClient[E]) RememberMany(ctx context.Context, key string, exp time
 	// if there was no error and the value isn't blank return
 	if err == nil && val != nil {
 		return val, nil
-	}
-
-	// if there was an error and it wasn't a not found error return
-	if err != nil && !errors.Is(err, NotFoundError) {
-		return nil, err
 	}
 
 	// call the fetcher to get the value we should remember

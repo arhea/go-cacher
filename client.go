@@ -86,7 +86,7 @@ func (c *Client) Get(ctx context.Context, key string) (interface{}, error) {
 	cmd := c.redis.Get(ctx, key)
 	err := cmd.Err()
 
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return nil, NotFoundError
 	}
 
@@ -103,7 +103,7 @@ func (c *Client) GetString(ctx context.Context, key string) (string, error) {
 	cmd := c.redis.Get(ctx, key)
 	err := cmd.Err()
 
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return "", NotFoundError
 	}
 
@@ -120,7 +120,7 @@ func (c *Client) GetBytes(ctx context.Context, key string) ([]byte, error) {
 	cmd := c.redis.Get(ctx, key)
 	err := cmd.Err()
 
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return nil, NotFoundError
 	}
 
@@ -137,7 +137,7 @@ func (c *Client) GetBool(ctx context.Context, key string) (bool, error) {
 	cmd := c.redis.Get(ctx, key)
 	err := cmd.Err()
 
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return false, NotFoundError
 	}
 
@@ -154,7 +154,7 @@ func (c *Client) GetInt(ctx context.Context, key string) (int, error) {
 	cmd := c.redis.Get(ctx, key)
 	err := cmd.Err()
 
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return 0, NotFoundError
 	}
 
@@ -171,7 +171,7 @@ func (c *Client) GetInt64(ctx context.Context, key string) (int64, error) {
 	cmd := c.redis.Get(ctx, key)
 	err := cmd.Err()
 
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return 0, NotFoundError
 	}
 
@@ -188,7 +188,7 @@ func (c *Client) GetFloat32(ctx context.Context, key string) (float32, error) {
 	cmd := c.redis.Get(ctx, key)
 	err := cmd.Err()
 
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return 0, NotFoundError
 	}
 
@@ -205,7 +205,7 @@ func (c *Client) GetFloat64(ctx context.Context, key string) (float64, error) {
 	cmd := c.redis.Get(ctx, key)
 	err := cmd.Err()
 
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return 0, NotFoundError
 	}
 
